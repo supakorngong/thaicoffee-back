@@ -1,0 +1,20 @@
+JOI .validate return this
+{
+  value: {
+    firstName: 'supakorn',
+    lastName: 'roek',
+    email: 'spk@gmail.com',
+    password: 123456,
+    address: 'soi 48'
+  },
+  error: [Error [ValidationError]: "password" must be a string] {
+    _original: {
+      firstName: 'supakorn',
+      lastName: 'roek',
+      email: 'spk@gmail.com',
+      password: 123456,
+      address: 'soi 48'
+    },
+    details: [ [Object] ]
+  }
+}

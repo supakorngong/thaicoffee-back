@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id   Int     @id @default(autoincrement()) @map("id")
+  firstName String
+  lastName  String
+  email     String  @unique
+  password  String
+  address   String
+  isAdmin   Boolean @default(false)
+  Cart      Cart[]
+  Order     Order[]
+}
+
+enum Region {
+  North
+  Mid
+  south
+  NorthEast
+}
+
+model Product {
+  product_id  Int         @id @default(autoincrement()) @map("id")
+  name        String
+  region      Region
+  description String
+  picture     String
+  cost        Decimal     @db.Decimal(10, 2)
+  stock       Int
+  Cart        Cart[]
+  orderItem   orderItem[]
+}
+
+model Cart {
+  cart_id    Int     @id @default(autoincrement()) @map("id")
+  product_id Int
+  user_id    Int
+  product    Product @relation(fields: [product_id], references: [product_id])
+  user       User    @relation(fields: [user_id], references: [user_id])
+  amount     Int
+}
+
+enum Status {
+  pending
+  checking
+  payed
+  received
+}
+
+model Order {
+  order_id   Int         @id @default(autoincrement()) @map("id")
+  user_id    Int
+  order_date DateTime    @default(now())
+  total_cost Decimal     @db.Decimal(10, 2)
+  evidence   String
+  status     Status      @default(pending)
+  user       User        @relation(fields: [user_id], references: [user_id])
+  orderItem  orderItem[]
+}
+
+model orderItem {
+  orderItem_Id Int     @id @default(autoincrement()) @map("id")
+  order_id     Int
+  product_id   Int
+  order        Order   @relation(fields: [order_id], references: [order_id])
+  product      Product @relation(fields: [product_id], references: [product_id])
+  amount       Int
+  cost         Decimal @db.Decimal(10, 2)
+}
