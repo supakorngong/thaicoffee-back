@@ -1,11 +1,9 @@
 const express = require("express");
-const { registerValidator } = require("../middleware/validator");
 const authController = require("../controller/authController");
+const { registerValidator, loginValidator } = require("../middleware/validator");
 const authRouter = express.Router();
 
-authRouter.post("/login", (req, res, next) => {
-  console.log("login success");
-});
-authRouter.post("/register", authController.register);
+authRouter.post("/register", registerValidator, authController.register);
+authRouter.post("/login", loginValidator, authController.login);
 
 module.exports = authRouter;

@@ -4,9 +4,10 @@ const { registerValidator } = require("./middleware/validator");
 const errorMiddleware = require("./middleware/error");
 require("dotenv").config();
 const app = express();
+const port = process.env.PORT || 8000;
 app.use(express.json());
-app.use("/auth", registerValidator, authRouter);
+app.use("/auth", authRouter);
 app.use(errorMiddleware);
-app.listen(8888, () => {
-  console.log("listen to port 8888");
+app.listen(port, () => {
+  console.log(`listen to port ${port}`);
 });

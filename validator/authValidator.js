@@ -10,3 +10,8 @@ exports.registerSchema = Joi.object({
   confirmPassword: Joi.string().required().valid(Joi.ref("password")).strip(),
   address: Joi.string().required().trim(),
 });
+
+exports.loginSchema = Joi.object({
+  email: Joi.string().required().trim(),
+  password: Joi.string().required(),
+});
