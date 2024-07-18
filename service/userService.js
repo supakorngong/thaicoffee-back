@@ -13,4 +13,23 @@ userService.findUserByEmail = (email) => {
   });
 };
 
+userService.findUserById = (id) => {
+  return prisma.user.findUnique({
+    where: {
+      user_id: id,
+    },
+  });
+};
+
+userService.updateAddressById = (id, address) => {
+  console.log("ofkepfpekpfepfepfepfpe", id, address);
+  return prisma.user.update({
+    where: {
+      user_id: id,
+    },
+    data: {
+      address: address,
+    },
+  });
+};
 module.exports = userService;

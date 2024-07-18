@@ -28,29 +28,31 @@ model User {
 enum Region {
   North
   Mid
-  south
+  South
   NorthEast
 }
 
 model Product {
-  product_id  Int         @id @default(autoincrement()) @map("id")
+  product_id  Int     @id @default(autoincrement()) @map("id")
   name        String
   region      Region
-  description String
-  picture     String
-  cost        Decimal     @db.Decimal(10, 2)
+  province    String
+  description String  @db.Text
+  picture     String  @db.Text
+  cost        Decimal @db.Decimal(10, 2)
   stock       Int
-  Cart        Cart[]
-  orderItem   orderItem[]
+
+  orderItem orderItem[]
+  Cart      Cart[]
 }
 
 model Cart {
   cart_id    Int     @id @default(autoincrement()) @map("id")
   product_id Int
   user_id    Int
-  product    Product @relation(fields: [product_id], references: [product_id])
-  user       User    @relation(fields: [user_id], references: [user_id])
   amount     Int
+  user       User    @relation(fields: [user_id], references: [user_id])
+  product    Product @relation(fields: [product_id], references: [product_id])
 }
 
 enum Status {

@@ -19,24 +19,46 @@ authController.register = async (req, res, next) => {
     next(err);
   }
 };
+
 authController.login = async (req, res, next) => {
   try {
     const data = req.input;
-    console.log(data);
+    console.log(req);
     const existUser = await userService.findUserByEmail(data.email);
     console.log(existUser);
     if (!existUser) {
+      // console.log("ahhahahaha");
       createNewError({ message: "invalid credentials", statusCode: 400 });
     }
-    const passwordMatched = hashService.compare(data.password, existUser.password);
+    const passwordMatched = await hashService.compare(data.password, existUser.password);
+
     if (!passwordMatched) {
       createNewError({ message: "invalid credentials password" });
     }
-    console.log("this is user Id", existUser.user_id);
+
+    // console.log("this is user Id", existUser.user_id);
+
     const accessToken = jwtService.sign({ id: existUser.user_id });
-    res.status(200).json(accessToken);
+    res.status(200).json({ accessToken });
   } catch (err) {
     next(err);
   }
 };
+
+authController.getMe = (req, res, next) => {
+  res.status(200).json({ user: req.user });
+};
+
+authController.editAddress = async (req, res, next) => {
+  try {
+    const { user_id } = req.user;
+    const { address } = req.body;
+    console.log("focusssss", user_id, address);
+    const response = await userService.updateAddressById(user_id, address);
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = authController;

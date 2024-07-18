@@ -15,12 +15,46 @@ Response
 --- Login ---
 post auth/login
 BODY
-     -emailOrMobile
+     -email
      -password
 Response
     200 accessToken
     400 message
     500 message
+
+
+
+---GET AUTHENTICATED USER
+GET /auth/me
+HEADER 
+    Authorization  bearer access_Token
+Response
+    200 USER 
+    400 message
+    401 message (unauthorized)
+    500 message
+
+
+--GET All Product
+get /products
+Response
+    200 Product
+    400 message
+    500 message
+
+
+   
+
+
+login admin
+(authAdminRouter)
+post /admin/login
+body email,password
+Response
+    200 accessToken
+    400 message
+    500 message
+
 
 
 
