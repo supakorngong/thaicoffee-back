@@ -9,7 +9,7 @@ const orderController = {};
 orderController.createOrder = async (req, res, next) => {
   try {
     if (!req.file) {
-      createError({ message: "message or image is required", statusCode: 400 });
+      createNewError({ message: "message or image is required", statusCode: 400 });
     }
     // const { user_id } = req.user;
     const data = {
