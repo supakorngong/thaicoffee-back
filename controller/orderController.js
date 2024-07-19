@@ -18,6 +18,7 @@ orderController.createOrder = async (req, res, next) => {
     };
 
     if (req.file) {
+      console.log(req.file, "fileeeeeeeeeeee");
       data.evidence = await uploadService.upload(req.file.path); //return secure_url ให้
     }
 
