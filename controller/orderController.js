@@ -8,6 +8,7 @@ const orderController = {};
 
 orderController.createOrder = async (req, res, next) => {
   try {
+    console.log(req.file, "fdsjafhsdjkflhadsfhdsjfhldsajfhdskhfdsahfkdsahfj");
     if (!req.file) {
       createNewError({ message: "message or image is required", statusCode: 400 });
     }
