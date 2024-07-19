@@ -7,6 +7,7 @@ const createNewError = require("../utils/createError");
 const orderController = {};
 
 orderController.createOrder = async (req, res, next) => {
+  console.log("first");
   try {
     console.log(req.file, "fdsjafhsdjkflhadsfhdsjfhldsajfhdskhfdsahfkdsahfj");
     if (!req.file) {
