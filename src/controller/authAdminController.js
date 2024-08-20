@@ -8,9 +8,7 @@ const authAdminController = {};
 authAdminController.login = async (req, res, next) => {
   try {
     const data = req.input;
-    console.log(req);
     const existUser = await userService.findUserByEmail(data.email);
-    console.log(existUser);
     if (!existUser) {
       console.log("ahhahahaha");
       createNewError({ message: "invalid credentials", statusCode: 400 });
@@ -23,7 +21,6 @@ authAdminController.login = async (req, res, next) => {
     if (!passwordMatched) {
       createNewError({ message: "invalid credentials password" });
     }
-    console.log("this is user Id", existUser.user_id);
     const accessToken = jwtService.sign({ id: existUser.user_id });
     res.status(200).json({ accessToken });
   } catch (err) {

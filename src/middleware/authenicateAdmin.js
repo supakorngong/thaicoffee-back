@@ -11,7 +11,7 @@ const authenticateAdmin = async (req, res, next) => {
     }
     const accessToken = authorization.split(" ")[1];
     const payLoad = jwtService.verify(accessToken);
-    console.log(payLoad);
+
     const foundUser = await userService.findUserById(payLoad.id);
     if (!foundUser) {
       createNewError({ message: "user not found", statusCode: 400 });
@@ -21,7 +21,6 @@ const authenticateAdmin = async (req, res, next) => {
       createNewError({ message: "you are not admin", statusCode: 400 });
     }
     req.user = foundUser;
-    console.log("this is req user", req.user);
 
     next();
   } catch (err) {

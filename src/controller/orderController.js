@@ -7,20 +7,16 @@ const createNewError = require("../utils/createError");
 const orderController = {};
 
 orderController.createOrder = async (req, res, next) => {
-  console.log("first");
   try {
-    console.log(req.file, "fdsjafhsdjkflhadsfhdsjfhldsajfhdskhfdsahfkdsahfj");
-    if (!req.file) {
-      createNewError({ message: "message or image is required", statusCode: 400 });
-    }
-    // const { user_id } = req.user;
+    // if (!req.file) {
+    //   createNewError({ message: "message or image is required", statusCode: 400 });
+    // }
     const data = {
       user_id: req.user.user_id,
       totalCost: req.body.totalCost,
     };
 
     if (req.file) {
-      console.log(req.file, "fileeeeeeeeeeee");
       data.evidence = await uploadService.upload(req.file.path); //return secure_url ให้
     }
 
@@ -49,6 +45,33 @@ orderController.createOrder = async (req, res, next) => {
     }
   }
 };
+orderController.createOrderByCredit = async (req, res, next) => {
+  try {
+    const data = {
+      user_id: req.user.user_id,
+      totalCost: req.body.cost,
+    };
+
+    const response = await orderService.createOrderFromCart(data); //totalcost evidence === input
+
+    const foundedCart = await cartService.findCartData(+data.user_id);
+
+    const input = foundedCart.map((el) => ({
+      order_id: response.order_id,
+      product_id: el.product.product_id,
+      amount: el.amount,
+      cost: el.product.cost,
+    }));
+
+    const result = await orderService.createOrderItem(input);
+
+    const cartId = foundedCart.map(async (el) => await cartService.deleteCart(el.cart_id));
+    req.order = response;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
 
 orderController.getAllOrder = async (req, res, next) => {
   try {
@@ -64,12 +87,11 @@ orderController.updateOrder = async (req, res, next) => {
     const { isAdmin } = req.user;
     const { orderId } = req.params;
     const { status } = req.body;
-    // console.log(req.body, "i am req body");
+
     if (status !== "received" && isAdmin !== true) {
       createNewError({ message: "not Admin cannot do this", statusCode: 401 });
     }
     const result = await orderService.updateOrder(orderId, status);
-    // console.log("yeahhhhh", result);
     res.send(result);
   } catch (err) {
     next(err);
