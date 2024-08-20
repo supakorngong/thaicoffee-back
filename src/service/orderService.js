@@ -56,7 +56,7 @@ orderService.getOrderByUser = (userId) => {
 orderService.updateOrder = (orderId, status) => {
   return prisma.order.update({
     where: {
-      order_id: +orderId,
+      order_id: orderId,
     },
     data: {
       status: status,

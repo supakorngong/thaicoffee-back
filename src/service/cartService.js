@@ -3,8 +3,6 @@ const createNewError = require("../utils/createError");
 
 const cartService = {};
 
-// foundCart.cart_id, product_id, amount, user_id
-
 cartService.insertToCart = async (input) => {
   try {
     const response = await prisma.cart.upsert({
@@ -20,7 +18,7 @@ cartService.insertToCart = async (input) => {
         amount: input.amount,
       },
     });
-    // console.log("this is response from cart service", response);
+
     return response;
   } catch (err) {
     createNewError({ message: err.message, statusCode: 500 });

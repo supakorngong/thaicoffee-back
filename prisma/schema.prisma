@@ -63,22 +63,37 @@ enum Status {
 }
 
 model Order {
-  order_id   Int         @id @default(autoincrement()) @map("id")
+  order_id   String      @id @default(uuid()) @map("id")
   user_id    Int
   order_date DateTime    @default(now())
   total_cost Decimal     @db.Decimal(10, 2)
-  evidence   String
+  evidence   String?
   status     Status      @default(pending)
   user       User        @relation(fields: [user_id], references: [user_id])
   orderItem  orderItem[]
+  Payment    Payment[]
 }
 
 model orderItem {
   orderItem_Id Int     @id @default(autoincrement()) @map("id")
-  order_id     Int
+  order_id     String
   product_id   Int
   order        Order   @relation(fields: [order_id], references: [order_id])
   product      Product @relation(fields: [product_id], references: [product_id])
   amount       Int
   cost         Decimal @db.Decimal(10, 2)
+}
+
+enum StatusPayment {
+  open
+  complete
+}
+
+model Payment {
+  payment_id     Int           @id @default(autoincrement()) @map("id")
+  order_id       String
+  status         StatusPayment @default(open)
+  session_id     String
+  transaction_id String
+  order          Order         @relation(fields: [order_id], references: [order_id])
 }
