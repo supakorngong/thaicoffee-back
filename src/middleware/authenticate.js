@@ -7,7 +7,7 @@ const authenticate = async (req, res, next) => {
     const authorization = req.headers.authorization;
 
     if (!authorization || !authorization.startsWith("Bearer ")) {
-      createNewError({ message: "unauthorizedeiei", statusCode: 401 });
+      createNewError({ message: "unauthorized", statusCode: 401 });
     }
 
     const accessToken = authorization.split(" ")[1];
