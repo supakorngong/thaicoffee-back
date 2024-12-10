@@ -50,7 +50,6 @@ orderController.createOrderByCredit = async (req, res, next) => {
     };
 
     const response = await orderService.createOrderFromCart(data); //totalcost evidence === input
-    console.log(response);
     const foundedCart = await cartService.findCartData(+data.user_id);
 
     const input = foundedCart.map((el) => ({

@@ -18,6 +18,7 @@ app.use(cors());
 app.use(express.static("public"));
 app.post("/webhook", express.raw({ type: "application/json" }), paymentController.webhook);
 app.use(express.json());
+
 app.use("/payment", paymentRouter);
 
 app.use("/auth", authRouter);

@@ -5,7 +5,6 @@ const productController = {};
 productController.getProduct = async (req, res, next) => {
   try {
     const result = await productService.getAllProduct();
-    console.log(result);
 
     res.status(200).json(result);
   } catch (err) {
