@@ -38,7 +38,6 @@ orderService.getOrder = () => {
 };
 
 orderService.getOrderByUser = (userId) => {
-  console.log("i am hereeeeeerrere", userId);
   return prisma.order.findMany({
     where: {
       user_id: userId,

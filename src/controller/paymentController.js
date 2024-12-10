@@ -55,22 +55,25 @@ paymentController.webhook = async (req, res) => {
   }
 
   // Handle the event
-
   switch (event.type) {
     case "checkout.session.completed":
       const paymentSuccessData = event.data.object;
+
       const orderId = paymentSuccessData.metadata.order;
+
       const sessionId = paymentSuccessData.id;
 
       const data = {
         status: paymentSuccessData.status,
         order: orderId,
       };
+
       const uuid = uuidv4();
+
       const result = await paymentService.webhook(data, sessionId, uuid);
+
       const statusOf = await orderService.updateOrder(orderId, "payed");
 
-      console.log("=== update result", result, statusOf);
       res.status(200).send("payment success");
       break;
 

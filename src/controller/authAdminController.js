@@ -10,7 +10,6 @@ authAdminController.login = async (req, res, next) => {
     const data = req.input;
     const existUser = await userService.findUserByEmail(data.email);
     if (!existUser) {
-      console.log("ahhahahaha");
       createNewError({ message: "invalid credentials", statusCode: 400 });
     }
     if (!existUser.isAdmin) {

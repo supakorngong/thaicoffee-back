@@ -22,7 +22,6 @@ userService.findUserById = (id) => {
 };
 
 userService.updateAddressById = (id, address) => {
-  console.log("ofkepfpekpfepfepfepfpe", id, address);
   return prisma.user.update({
     where: {
       user_id: id,

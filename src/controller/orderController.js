@@ -3,14 +3,10 @@ const orderService = require("../service/orderService");
 const uploadService = require("../service/uploadService");
 const fs = require("fs/promises");
 const createNewError = require("../utils/createError");
-
 const orderController = {};
 
 orderController.createOrder = async (req, res, next) => {
   try {
-    // if (!req.file) {
-    //   createNewError({ message: "message or image is required", statusCode: 400 });
-    // }
     const data = {
       user_id: req.user.user_id,
       totalCost: req.body.totalCost,
@@ -45,6 +41,7 @@ orderController.createOrder = async (req, res, next) => {
     }
   }
 };
+
 orderController.createOrderByCredit = async (req, res, next) => {
   try {
     const data = {
@@ -53,7 +50,7 @@ orderController.createOrderByCredit = async (req, res, next) => {
     };
 
     const response = await orderService.createOrderFromCart(data); //totalcost evidence === input
-
+    console.log(response);
     const foundedCart = await cartService.findCartData(+data.user_id);
 
     const input = foundedCart.map((el) => ({

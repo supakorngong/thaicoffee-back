@@ -13,8 +13,6 @@ const storage = multer.diskStorage({
     callback(null, imageDirectory);
   },
   filename: (req, file, callback) => {
-    console.log(file);
-    console.log("%%%%%%%%%%");
     const filename = `${new Date().getTime()}${Math.round(Math.random() * 100000)}.${file.mimetype.split("/")[1]}`;
     callback(null, filename);
   },

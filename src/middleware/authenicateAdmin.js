@@ -5,7 +5,6 @@ const createNewError = require("../utils/createError");
 const authenticateAdmin = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
-    console.log(authorization);
     if (!authorization || !authorization.startsWith("Bearer ")) {
       createNewError({ message: "unauthorized", statusCode: 401 });
     }

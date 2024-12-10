@@ -2,7 +2,6 @@ const createNewError = require("../utils/createError");
 const { registerSchema, loginSchema } = require("../validator/authValidator");
 
 exports.registerValidator = (req, res, next) => {
-  console.log(req);
   const { value, error } = registerSchema.validate(req.body);
 
   if (error) {
