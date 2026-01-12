@@ -3,6 +3,7 @@ const orderController = require("../controller/orderController");
 const upload = require("../middleware/upload");
 const orderRouter = express.Router();
 
+orderRouter.get("/:userid", orderController.getOrderViaInfo);
 orderRouter.post("/", upload.single("evidence"), orderController.createOrder);
 orderRouter.get("/", orderController.getAllOrder);
 orderRouter.get("/items", orderController.getOrderByUserId);

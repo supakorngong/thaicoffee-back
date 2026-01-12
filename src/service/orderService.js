@@ -52,6 +52,17 @@ orderService.getOrderByUser = (userId) => {
   });
 };
 
+orderService.getOrderWithInfo = (userId) => {
+  return prisma.order.findMany({
+    where: {
+      user_id: userId, // ฟิลด์ user_id ตามที่กำหนดใน schema ของ Order
+    },
+    include: {
+      orderItem: { include: { product: { select: { product_id: true } } } },
+    },
+  });
+};
+
 orderService.updateOrder = (orderId, status) => {
   return prisma.order.update({
     where: {

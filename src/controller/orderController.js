@@ -35,7 +35,6 @@ orderController.createOrder = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    console.log(req.file);
     if (req.file.fieldname === "evidence") {
       fs.unlink(req.file.path);
     }
@@ -48,9 +47,9 @@ orderController.createOrderByCredit = async (req, res, next) => {
       user_id: req.user.user_id,
       totalCost: req.body.cost,
     };
+    const response = await orderService.createOrderFromCart(data); //สร้าง order
 
-    const response = await orderService.createOrderFromCart(data); //totalcost evidence === input
-    const foundedCart = await cartService.findCartData(+data.user_id);
+    const foundedCart = await cartService.findCartData(+data.user_id); //หาตะกร้า
 
     const input = foundedCart.map((el) => ({
       order_id: response.order_id,
@@ -59,9 +58,9 @@ orderController.createOrderByCredit = async (req, res, next) => {
       cost: el.product.cost,
     }));
 
-    const result = await orderService.createOrderItem(input);
+    await orderService.createOrderItem(input); // สร้าง orderItem
 
-    const cartId = foundedCart.map(async (el) => await cartService.deleteCart(el.cart_id));
+    foundedCart.map(async (el) => await cartService.deleteCart(el.cart_id)); // ลบ cart
     req.order = response;
     next();
   } catch (err) {
@@ -77,6 +76,16 @@ orderController.getAllOrder = async (req, res, next) => {
     next(err);
   }
 };
+//ai
+orderController.getOrderViaInfo = async (req, res, next) => {
+  try {
+    const { user } = req.params;
+    const order = await orderService.getOrderWithInfo(user);
+    res.status(200).json(order);
+  } catch (err) {
+    next(err);
+  }
+}; //
 
 orderController.updateOrder = async (req, res, next) => {
   try {

@@ -16,11 +16,11 @@ const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.static("public"));
+// เมื่อ user จ่ายเงินด้วยบัตรเครดิตสําเร็จ  Stripe จะ Trigger Webhook ไปยัง URL ที่เราตั้งค่าไว้ (/webhook)
 app.post("/webhook", express.raw({ type: "application/json" }), paymentController.webhook);
 app.use(express.json());
 
 app.use("/payment", paymentRouter);
-
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
 app.use("/cart", authenticate, cartRouter);
@@ -28,6 +28,7 @@ app.use("/order", authenticate, orderRouter);
 app.use("/admin", authAdminRouter);
 
 app.use(errorMiddleware);
+
 app.listen(port, () => {
   console.log(`listen to port ${port}`);
 });

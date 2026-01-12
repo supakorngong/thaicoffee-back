@@ -43,8 +43,6 @@ Response
     500 message
 
 
-   
-
 
 login admin
 (authAdminRouter)

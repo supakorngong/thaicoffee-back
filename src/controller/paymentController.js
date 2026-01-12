@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require("uuid");
 const orderService = require("../service/orderService");
 
 const paymentController = {};
-
+// stripe
 paymentController.checkout = async (req, res, next) => {
   try {
     const products = req.body.input;
@@ -25,17 +25,20 @@ paymentController.checkout = async (req, res, next) => {
     }));
     const { order_id } = req.order;
 
+    // Stripe Checkout Session โดยใช้ stripe.checkout.sessions.create()
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: checkoutProduct,
+      line_items: checkoutProduct, //line_items สำหรับ Stripe Checkout ฟอร์แมตข้อมูลให้ตรงกับที่ Stripe ต้องการ
       mode: "payment",
       metadata: {
-        order: order_id,
+        order: order_id, //เอาไว้ ติดตามสถานะการจ่ายเงิน จะได้เปลี่ยนเป็น payed ได้
+        //ระบบ backend สามารถใช้ metadata.orderเพื่อรู้ว่าการชำระเงินนี้เป็นของคำสั่งซื้อใด และอัปเดตสถานะคำสั่งซื้อในฐานข้อมูลได้
       },
       success_url: `http://localhost:8888/success.html`,
       cancel_url: `http://localhost:8888/cancel.html`,
     });
     res.status(200).json({ url: session.url });
+    // Frontend จะใช้ URL นี้เพื่อ redirect ผู้ใช้ไปยังหน้าชำระเงินของ Stripe
   } catch (err) {
     next(err);
   }
@@ -47,6 +50,7 @@ paymentController.webhook = async (req, res) => {
   let event;
 
   try {
+    // req.body = ข้อมูลเกี่ยวกับการชำระเงิน
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     console.error("Webhook Error:", err.message);
@@ -70,9 +74,9 @@ paymentController.webhook = async (req, res) => {
 
       const uuid = uuidv4();
 
-      const result = await paymentService.webhook(data, sessionId, uuid);
+      await paymentService.webhook(data, sessionId, uuid);
 
-      const statusOf = await orderService.updateOrder(orderId, "payed");
+      await orderService.updateOrder(orderId, "payed");
 
       res.status(200).send("payment success");
       break;
