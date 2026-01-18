@@ -18,8 +18,8 @@ const authenticate = async (req, res, next) => {
       createNewError({ message: "user not found", statusCode: 400 });
     }
     delete foundUser.password;
-
     req.user = foundUser;
+    console.log("Authenticated user:", foundUser);
 
     next();
   } catch (err) {

@@ -23,6 +23,7 @@ orderService.createOrderItem = (input) => {
     data: input,
   });
 };
+
 orderService.deleteCart = (cartId) => {
   prisma.cart.deleteMany({
     where: {
@@ -49,13 +50,16 @@ orderService.getOrderByUser = (userId) => {
         },
       },
     },
+    orderBy: {
+      order_date: "desc",
+    },
   });
 };
 
 orderService.getOrderWithInfo = (userId) => {
   return prisma.order.findMany({
     where: {
-      user_id: userId, // ฟิลด์ user_id ตามที่กำหนดใน schema ของ Order
+      user_id: +userId, // ฟิลด์ user_id ตามที่กำหนดใน schema ของ Order
     },
     include: {
       orderItem: { include: { product: { select: { product_id: true } } } },

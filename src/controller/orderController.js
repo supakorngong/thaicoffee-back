@@ -69,6 +69,7 @@ orderController.createOrderByCredit = async (req, res, next) => {
 };
 
 orderController.getAllOrder = async (req, res, next) => {
+  console.log("eieie", "hahahhah", "fkleokfoekf", "all");
   try {
     const order = await orderService.getOrder();
     res.status(200).json(order);
@@ -78,9 +79,11 @@ orderController.getAllOrder = async (req, res, next) => {
 };
 //ai
 orderController.getOrderViaInfo = async (req, res, next) => {
+  console.log("eieie", "hahahhah", "fkleokfoekf", "info");
   try {
-    const { user } = req.params;
-    const order = await orderService.getOrderWithInfo(user);
+    const { userId } = req.params;
+
+    const order = await orderService.getOrderWithInfo(userId);
     res.status(200).json(order);
   } catch (err) {
     next(err);
