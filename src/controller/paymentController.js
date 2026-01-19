@@ -34,8 +34,9 @@ paymentController.checkout = async (req, res, next) => {
         order: order_id, //เอาไว้ ติดตามสถานะการจ่ายเงิน จะได้เปลี่ยนเป็น payed ได้
         //ระบบ backend สามารถใช้ metadata.orderเพื่อรู้ว่าการชำระเงินนี้เป็นของคำสั่งซื้อใด และอัปเดตสถานะคำสั่งซื้อในฐานข้อมูลได้
       },
-      success_url: `http://localhost:8888/success.html`,
-      cancel_url: `http://localhost:8888/cancel.html`,
+      // success_url: `http://localhost:8888/success.html`,
+      success_url: `${process.env.baseurl}/success.html`,
+      cancel_url: `${process.env.baseurl}/cancel.html`,
     });
     res.status(200).json({ url: session.url });
     // Frontend จะใช้ URL นี้เพื่อ redirect ผู้ใช้ไปยังหน้าชำระเงินของ Stripe
