@@ -1,4 +1,5 @@
 const cartService = require("../service/cartService");
+const productService = require("../service/productService");
 
 const cartController = {};
 
@@ -6,10 +7,13 @@ cartController.createOrUpdateCart = async (req, res, next) => {
   try {
     const { user_id } = req.user;
     const { product_id, amount } = req.body;
+    // check stock
+    await productService.checkStock(amount, product_id);
     const foundCart = await cartService.findCart(user_id, product_id);
 
     const input = { cartId: foundCart?.cart_id || 0, productId: product_id, amount, userId: user_id };
-    const result = await cartService.insertToCart(input);
+
+    await cartService.insertToCart(input);
 
     res.status(200).json("add to cart already");
   } catch (err) {

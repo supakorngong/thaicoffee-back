@@ -23,4 +23,5 @@ productController.updateProductStock = async (req, res, next) => {
     next(err);
   }
 };
+
 module.exports = productController;

@@ -27,5 +27,20 @@ productService.updateStock = async (amounts, productId) => {
     createNewError({ message: err.message, statusCode: 500 });
   }
 };
+productService.checkStock = async (amounts, productId) => {
+  try {
+    const product = await prisma.product.findUnique({
+      where: {
+        product_id: productId,
+      },
+    });
+    if (product.stock < amounts) {
+      createNewError({ message: "Product is not enough", statusCode: 400 });
+    }
+    return true;
+  } catch (err) {
+    createNewError({ message: err.message, statusCode: err.statusCode || 500 });
+  }
+};
 
 module.exports = productService;
