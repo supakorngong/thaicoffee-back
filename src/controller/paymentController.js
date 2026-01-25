@@ -41,7 +41,6 @@ paymentController.checkout = async (req, res, next) => {
       success_url: `${process.env.BASE_URL}/success.html`,
       cancel_url: `${process.env.BASE_URL}/cancel.html`,
     });
-    console.log("eoeoe");
 
     res.status(200).json({ url: session.url });
     // Frontend จะใช้ URL นี้เพื่อ redirect ผู้ใช้ไปยังหน้าชำระเงินของ Stripe
@@ -58,8 +57,6 @@ paymentController.webhook = async (req, res) => {
   try {
     // req.body = ข้อมูลเกี่ยวกับการชำระเงิน
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    console.log("############ Webhook Event Received ###########");
-    console.log(event);
   } catch (err) {
     console.error("Webhook Error:", err.message);
     res.send(`Webhook Error: ${err.message}`);
@@ -85,7 +82,6 @@ paymentController.webhook = async (req, res) => {
       await paymentService.webhook(data, sessionId, uuid);
 
       await orderService.updateOrder(orderId, "payed");
-      console.log("Payment was successful.");
 
       res.status(200).send("payment success");
       break;
