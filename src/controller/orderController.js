@@ -47,9 +47,10 @@ orderController.createOrderByCredit = async (req, res, next) => {
       user_id: req.user.user_id,
       totalCost: req.body.cost,
     };
+
     const response = await orderService.createOrderFromCart(data); //สร้าง order
 
-    const foundedCart = await cartService.findCartData(+data.user_id); //หาตะกร้า
+    const foundedCart = await cartService.findCartData(data.user_id); //หาตะกร้า
 
     const input = foundedCart.map((el) => ({
       order_id: response.order_id,
@@ -62,6 +63,7 @@ orderController.createOrderByCredit = async (req, res, next) => {
 
     foundedCart.map(async (el) => await cartService.deleteCart(el.cart_id)); // ลบ cart
     req.order = response;
+
     next();
   } catch (err) {
     next(err);
@@ -69,7 +71,6 @@ orderController.createOrderByCredit = async (req, res, next) => {
 };
 
 orderController.getAllOrder = async (req, res, next) => {
-  console.log("eieie", "hahahhah", "fkleokfoekf", "all");
   try {
     const order = await orderService.getOrder();
     res.status(200).json(order);
@@ -77,9 +78,8 @@ orderController.getAllOrder = async (req, res, next) => {
     next(err);
   }
 };
-//ai
+
 orderController.getOrderViaInfo = async (req, res, next) => {
-  console.log("eieie", "hahahhah", "fkleokfoekf", "info");
   try {
     const { userId } = req.params;
 

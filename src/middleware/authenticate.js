@@ -19,7 +19,6 @@ const authenticate = async (req, res, next) => {
     }
     delete foundUser.password;
     req.user = foundUser;
-    console.log("Authenticated user:", foundUser);
 
     next();
   } catch (err) {

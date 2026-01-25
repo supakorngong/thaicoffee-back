@@ -13,6 +13,7 @@ const paymentController = {};
 paymentController.checkout = async (req, res, next) => {
   try {
     const products = req.body.input;
+
     const checkoutProduct = products.map((el) => ({
       price_data: {
         currency: "thb",
@@ -23,6 +24,7 @@ paymentController.checkout = async (req, res, next) => {
       },
       quantity: el.amount,
     }));
+
     const { order_id } = req.order;
 
     // Stripe Checkout Session โดยใช้ stripe.checkout.sessions.create()
@@ -35,9 +37,10 @@ paymentController.checkout = async (req, res, next) => {
         //ระบบ backend สามารถใช้ metadata.orderเพื่อรู้ว่าการชำระเงินนี้เป็นของคำสั่งซื้อใด และอัปเดตสถานะคำสั่งซื้อในฐานข้อมูลได้
       },
       // success_url: `http://localhost:8888/success.html`,
-      success_url: `${process.env.baseurl}/success.html`,
-      cancel_url: `${process.env.baseurl}/cancel.html`,
+      success_url: `${process.env.BASE_URL}/success.html`,
+      cancel_url: `${process.env.BASE_URL}/cancel.html`,
     });
+
     res.status(200).json({ url: session.url });
     // Frontend จะใช้ URL นี้เพื่อ redirect ผู้ใช้ไปยังหน้าชำระเงินของ Stripe
   } catch (err) {

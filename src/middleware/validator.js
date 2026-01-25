@@ -15,7 +15,6 @@ exports.registerValidator = (req, res, next) => {
 
 exports.loginValidator = (req, res, next) => {
   const { value, error } = loginSchema.validate(req.body);
-  console.log(req.body, "body");
   if (error) {
     createNewError({ message: error.details[0].message });
   }
